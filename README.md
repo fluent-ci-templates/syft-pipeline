@@ -38,9 +38,9 @@ dagger run fluentci .
 
 ## Jobs
 
-| Job      | Description                  |
-| -------- | ---------------------------- |
-| scan     | Scan for vulnerabilities     |
+| Job      | Description                                   |
+| -------- | --------------------------------------------- |
+| sbom     | Generate a software bill of materials (SBOM). |
 
 ## Programmatic usage
 
@@ -48,7 +48,7 @@ You can also use this pipeline programmatically:
 
 ```ts
 import Client, { connect } from "https://sdk.fluentci.io/v0.1.9/mod.ts";
-import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.1.0/mod.ts";
+import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.1.1/mod.ts";
 
 function pipeline(src = ".") {
   connect(async (client: Client) => {
