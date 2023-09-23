@@ -36,6 +36,13 @@ export function generateYaml(): Workflow {
         name: "Run Dagger Pipelines",
         run: "fluentci run syft_pipeline",
       },
+      {
+        name: "Upload coverage to Codecov",
+        run: "dagger run fluentci codecov_pipeline",
+        env: {
+          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}",
+        },
+      },
     ],
   };
 
