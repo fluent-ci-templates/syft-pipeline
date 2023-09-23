@@ -32,7 +32,7 @@ dagger run fluentci .
 
 | Variable                | Description                                       |
 | ----------------------- | ------------------------------------------------- |
-| SYFT_IMAGE              | The image to scan. Defaults to `.`                                 |
+| SYFT_IMAGE              | The image or filesystem to scan. Defaults to `.`                                 |
 | SYFT_OUTPUT_FILE        | The output file. Defaults to STDOUT                                    |
 | SYFT_OUTPUT_FORMAT      | The output format. Can be: syft-json, github-json, syft-table, syft-text, template, cyclonedx-xml, cyclonedx-json, spdx-tag-value, spdx-json   |
 
