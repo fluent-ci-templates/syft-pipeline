@@ -4,7 +4,7 @@
 ![deno compatibility](https://shield.deno.dev/deno/^1.34)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/syft-pipeline)](https://codecov.io/gh/fluent-ci-templates/syft-pipeline)
 
-A ready-to-use CI/CD Pipeline for generating a software bill of materials (SBOM) using syft.
+A ready-to-use CI/CD Pipeline for generating a software bill of materials (SBOM) using [Syft](https://github.com/anchore/syft).
 
 ## 🚀 Usage
 
