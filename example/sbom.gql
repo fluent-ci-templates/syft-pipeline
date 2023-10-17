@@ -1,5 +1,5 @@
 {
   syft {
-    sbom(src: ".")
+    sbom(src: "anchore/syft:latest")
   }
 }
