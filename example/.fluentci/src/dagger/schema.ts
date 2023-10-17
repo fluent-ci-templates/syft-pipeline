@@ -15,8 +15,9 @@ const Query = queryType({
     t.string("sbom", {
       args: {
         src: nonNull(stringArg()),
+        image: stringArg(),
       },
-      resolve: async (_root, args, _ctx) => await sbom(args.src),
+      resolve: async (_root, args, _ctx) => await sbom(args.src, args.image),
     });
   },
 });

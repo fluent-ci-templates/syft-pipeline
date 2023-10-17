@@ -56,6 +56,7 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Query: {
     sbom: { // args
+      image?: string | null; // String
       src: string; // String!
     }
   }

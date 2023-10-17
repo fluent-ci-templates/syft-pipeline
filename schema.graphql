@@ -3,5 +3,5 @@
 
 
 type Query {
-  sbom(src: String!): String
+  sbom(image: String, src: String!): String
 }

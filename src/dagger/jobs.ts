@@ -6,9 +6,9 @@ export enum Job {
 
 export const exclude = [".git", ".fluentci", "node_modules"];
 
-export const sbom = async (src = ".", outputFile?: string) => {
+export const sbom = async (src = ".", image?: string, outputFile?: string) => {
   await connect(async (client: Client) => {
-    const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || src;
+    const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || src;
     const context = client.host().directory(src);
     let args = [SYFT_IMAGE];
     const SYFT_OUTPUT_FILE = Deno.env.get("SYFT_OUTPUT_FILE") || outputFile;
@@ -38,10 +38,16 @@ export const sbom = async (src = ".", outputFile?: string) => {
   return "Done";
 };
 
-export type JobExec = (src?: string) =>
+export type JobExec = (
+  src?: string,
+  image?: string,
+  outputFile?: string
+) =>
   | Promise<string>
   | ((
       src?: string,
+      image?: string,
+      outputFile?: string,
       options?: {
         ignore: string[];
       }
