@@ -1,7 +1,7 @@
 # Syft Pipeline
 
 [![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fsyft_pipeline&query=%24.version)](https://pkg.fluentci.io/syft_pipeline)
-![deno compatibility](https://shield.deno.dev/deno/^1.34)
+![deno compatibility](https://shield.deno.dev/deno/^1.37)
 [![](https://img.shields.io/codecov/c/gh/fluent-ci-templates/syft-pipeline)](https://codecov.io/gh/fluent-ci-templates/syft-pipeline)
 
 A ready-to-use CI/CD Pipeline for generating a software bill of materials (SBOM) using [Syft](https://github.com/anchore/syft).
@@ -41,6 +41,10 @@ fluentci run .
 | Job      | Description                                   |
 | -------- | --------------------------------------------- |
 | sbom     | Generate a software bill of materials (SBOM). |
+
+```graphql
+sbom(image: String, src: String!): String
+```
 
 ## Programmatic usage
 
