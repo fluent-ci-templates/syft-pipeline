@@ -35,7 +35,7 @@ export async function sbom(
     }
 
     const SYFT_OUTPUT_FORMAT =
-      Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-text";
+      Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-table";
 
     if (SYFT_OUTPUT_FORMAT) {
       args = [...args, "--output", SYFT_OUTPUT_FORMAT];
