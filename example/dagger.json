@@ -1,4 +1,4 @@
 {
-  "name": "syft-example",
+  "name": "syft",
   "sdk": "github.com/fluentci-io/daggerverse/deno-sdk@main"
 }
