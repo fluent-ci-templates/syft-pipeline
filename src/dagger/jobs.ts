@@ -1,4 +1,6 @@
-import Client, { connect } from "../../deps.ts";
+import Client, { Directory, File } from "../../deps.ts";
+import { connect } from "../../sdk/connect.ts";
+import { getDirectory } from "./lib.ts";
 
 export enum Job {
   sbom = "sbom",
@@ -6,10 +8,25 @@ export enum Job {
 
 export const exclude = [".git", ".fluentci", "node_modules"];
 
-export const sbom = async (src = ".", image?: string, outputFile?: string) => {
+/**
+ * @function
+ * @description Generate a software bill of materials
+ * @param {Directory | string} src The context to run the job in
+ * @param {string} outputFile The name of the output file
+ * @param {string} image The image to run the job in
+ * @param {string} output The output format
+ * @returns {Promise<File | string>}
+ */
+export async function sbom(
+  src: Directory | string,
+  outputFile: string,
+  image?: string,
+  output?: string
+): Promise<File | string> {
+  let id = "";
   await connect(async (client: Client) => {
-    const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || src;
-    const context = client.host().directory(src);
+    const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || ".";
+    const context = getDirectory(client, src);
     let args = [SYFT_IMAGE];
     const SYFT_OUTPUT_FILE = Deno.env.get("SYFT_OUTPUT_FILE") || outputFile;
 
@@ -17,7 +34,8 @@ export const sbom = async (src = ".", image?: string, outputFile?: string) => {
       args = [...args, "--file", SYFT_OUTPUT_FILE];
     }
 
-    const SYFT_OUTPUT_FORMAT = Deno.env.get("SYFT_OUTPUT_FORMAT");
+    const SYFT_OUTPUT_FORMAT =
+      Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-text";
 
     if (SYFT_OUTPUT_FORMAT) {
       args = [...args, "--output", SYFT_OUTPUT_FORMAT];
@@ -31,27 +49,17 @@ export const sbom = async (src = ".", image?: string, outputFile?: string) => {
       .withWorkdir("/app")
       .withExec(args);
 
-    const result = await ctr.stdout();
-
-    console.log(result);
+    await ctr.stdout();
+    id = await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).id();
   });
-  return "Done";
-};
+  return id;
+}
 
 export type JobExec = (
-  src?: string,
-  image?: string,
-  outputFile?: string
-) =>
-  | Promise<string>
-  | ((
-      src?: string,
-      image?: string,
-      outputFile?: string,
-      options?: {
-        ignore: string[];
-      }
-    ) => Promise<string>);
+  src: Directory | string,
+  outputFile: string,
+  image?: string
+) => Promise<File | string>;
 
 export const runnableJobs: Record<Job, JobExec> = {
   [Job.sbom]: sbom,
