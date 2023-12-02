@@ -36,6 +36,14 @@ fluentci run .
 | SYFT_OUTPUT_FILE        | The output file. Defaults to STDOUT                                    |
 | SYFT_OUTPUT_FORMAT      | The output format. Can be: syft-json, github-json, syft-table, syft-text, template, cyclonedx-xml, cyclonedx-json, spdx-tag-value, spdx-json   |
 
+## Dagger Module
+
+Use as a [Dagger](https://dagger.io) Module:
+
+```bash
+dagger mod install github.com/fluent-ci-templates/syft-pipeline@mod
+```
+
 ## Jobs
 
 | Job      | Description                                   |
