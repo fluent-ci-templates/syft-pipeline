@@ -1,5 +1,4 @@
-import Client, { Directory, File } from "../../deps.ts";
-import { connect } from "../../sdk/connect.ts";
+import { Directory, File, dag } from "../../deps.ts";
 import { getDirectory } from "./lib.ts";
 
 export enum Job {
@@ -23,35 +22,33 @@ export async function sbom(
   image?: string,
   output?: string
 ): Promise<File | string> {
-  let id = "";
-  await connect(async (client: Client) => {
-    const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || ".";
-    const context = getDirectory(client, src);
-    let args = [SYFT_IMAGE];
-    const SYFT_OUTPUT_FILE = Deno.env.get("SYFT_OUTPUT_FILE") || outputFile;
+  const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || ".";
+  const context = await getDirectory(dag, src);
+  let args = [SYFT_IMAGE];
+  const SYFT_OUTPUT_FILE = Deno.env.get("SYFT_OUTPUT_FILE") || outputFile;
 
-    if (SYFT_OUTPUT_FILE) {
-      args = [...args, "--file", SYFT_OUTPUT_FILE];
-    }
+  if (SYFT_OUTPUT_FILE) {
+    args = [...args, "--file", SYFT_OUTPUT_FILE];
+  }
 
-    const SYFT_OUTPUT_FORMAT =
-      Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-table";
+  const SYFT_OUTPUT_FORMAT =
+    Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-table";
 
-    if (SYFT_OUTPUT_FORMAT) {
-      args = [...args, "--output", SYFT_OUTPUT_FORMAT];
-    }
+  if (SYFT_OUTPUT_FORMAT) {
+    args = [...args, "--output", SYFT_OUTPUT_FORMAT];
+  }
 
-    const ctr = client
-      .pipeline(Job.sbom)
-      .container()
-      .from("anchore/syft")
-      .withDirectory("/app", context, { exclude })
-      .withWorkdir("/app")
-      .withExec(args);
+  const ctr = dag
+    .pipeline(Job.sbom)
+    .container()
+    .from("anchore/syft")
+    .withDirectory("/app", context, { exclude })
+    .withWorkdir("/app")
+    .withExec(args);
 
-    await ctr.stdout();
-    id = await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).id();
-  });
+  await ctr.stdout();
+  const id = await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).id();
+  await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).export(SYFT_OUTPUT_FILE);
   return id;
 }
 
