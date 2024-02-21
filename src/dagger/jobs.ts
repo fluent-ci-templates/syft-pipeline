@@ -13,14 +13,14 @@ export const exclude = [".git", ".fluentci", "node_modules"];
  * @param {Directory | string} src The context to run the job in
  * @param {string} outputFile The name of the output file
  * @param {string} image The image to run the job in
- * @param {string} output The output format
+ * @param {string} outputFormat The output format
  * @returns {Promise<File | string>}
  */
 export async function sbom(
   src: Directory | string,
   outputFile: string,
   image?: string,
-  output?: string
+  outputFormat?: string
 ): Promise<File | string> {
   const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || ".";
   const context = await getDirectory(dag, src);
@@ -32,7 +32,7 @@ export async function sbom(
   }
 
   const SYFT_OUTPUT_FORMAT =
-    Deno.env.get("SYFT_OUTPUT_FORMAT") || output || "syft-table";
+    Deno.env.get("SYFT_OUTPUT_FORMAT") || outputFormat || "syft-table";
 
   if (SYFT_OUTPUT_FORMAT) {
     args = [...args, "--output", SYFT_OUTPUT_FORMAT];
@@ -55,7 +55,8 @@ export async function sbom(
 export type JobExec = (
   src: Directory | string,
   outputFile: string,
-  image?: string
+  image?: string,
+  outputFormat?: string
 ) => Promise<File | string>;
 
 export const runnableJobs: Record<Job, JobExec> = {

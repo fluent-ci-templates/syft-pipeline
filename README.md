@@ -54,7 +54,8 @@ dagger mod install github.com/fluent-ci-templates/syft-pipeline@mod
 sbom(
   src: Directory | string,
   outputFile: string,
-  image?: string
+  image?: string,
+   outputFormat?: string
 ): Promise<File | string>
 ```
 
