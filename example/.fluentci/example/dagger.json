@@ -1,5 +1,0 @@
-{
-  "root": "",
-  "name": "syft",
-  "sdkRuntime": "tsiry/dagger-sdk-deno"
-}
