@@ -72,7 +72,7 @@ sbom(
 You can also use this pipeline programmatically:
 
 ```ts
-import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.3.3/mod.ts";
+import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.3.4/mod.ts";
 
 await sbom(".", "sbom-output");
 ```

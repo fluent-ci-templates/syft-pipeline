@@ -1,3 +1,8 @@
+/**
+ * @module syft
+ * @description Generate a software bill of materials (SBOM) using the syft tool
+ */
+
 import { Directory, File, dag } from "../../deps.ts";
 import { getDirectory } from "./lib.ts";
 
