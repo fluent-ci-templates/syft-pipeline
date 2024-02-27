@@ -44,6 +44,14 @@ Use as a [Dagger](https://dagger.io) Module:
 dagger mod install github.com/fluent-ci-templates/syft-pipeline@mod
 ```
 
+Call functions from the module:
+
+```bash
+dagger call sbom --src . \
+  --output-file sbom-output \
+  --image hashicorp/terraform:latest
+```
+
 ## Jobs
 
 | Job      | Description                                   |
@@ -64,7 +72,7 @@ sbom(
 You can also use this pipeline programmatically:
 
 ```ts
-import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.3.2/mod.ts";
+import { sbom } from "https://pkg.fluentci.io/syft_pipeline@v0.3.3/mod.ts";
 
 await sbom(".", "sbom-output");
 ```
