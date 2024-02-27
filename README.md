@@ -41,7 +41,7 @@ fluentci run .
 Use as a [Dagger](https://dagger.io) Module:
 
 ```bash
-dagger mod install github.com/fluent-ci-templates/syft-pipeline@mod
+dagger install github.com/fluent-ci-templates/syft-pipeline@main
 ```
 
 Call functions from the module:
