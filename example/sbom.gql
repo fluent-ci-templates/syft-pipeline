@@ -1,7 +1,0 @@
-{
-  syft {
-    sbom(src: ".", outputFile: "sbom-output", image: "anchore/syft:latest") {
-      id
-    }
-  }
-}

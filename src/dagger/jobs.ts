@@ -3,7 +3,7 @@
  * @description Generate a software bill of materials (SBOM) using the syft tool
  */
 
-import { Directory, File, dag } from "../../deps.ts";
+import { Directory, File, dag, env } from "../../deps.ts";
 import { getDirectory } from "./lib.ts";
 
 export enum Job {
@@ -13,6 +13,8 @@ export enum Job {
 export const exclude = [".git", ".fluentci", "node_modules"];
 
 /**
+ * Generate a software bill of materials
+ *
  * @function
  * @description Generate a software bill of materials
  * @param {Directory | string} src The context to run the job in
@@ -27,17 +29,17 @@ export async function sbom(
   image?: string,
   outputFormat?: string
 ): Promise<File | string> {
-  const SYFT_IMAGE = Deno.env.get("SYFT_IMAGE") || image || ".";
-  const context = await getDirectory(dag, src);
+  const SYFT_IMAGE = env.get("SYFT_IMAGE") || image || ".";
+  const context = await getDirectory(src);
   let args = [SYFT_IMAGE];
-  const SYFT_OUTPUT_FILE = Deno.env.get("SYFT_OUTPUT_FILE") || outputFile;
+  const SYFT_OUTPUT_FILE = env.get("SYFT_OUTPUT_FILE") || outputFile;
 
   if (SYFT_OUTPUT_FILE) {
     args = [...args, "--file", SYFT_OUTPUT_FILE];
   }
 
   const SYFT_OUTPUT_FORMAT =
-    Deno.env.get("SYFT_OUTPUT_FORMAT") || outputFormat || "syft-table";
+    env.get("SYFT_OUTPUT_FORMAT") || outputFormat || "syft-table";
 
   if (SYFT_OUTPUT_FORMAT) {
     args = [...args, "--output", SYFT_OUTPUT_FORMAT];
@@ -52,9 +54,8 @@ export async function sbom(
     .withExec(args);
 
   await ctr.stdout();
-  const id = await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).id();
   await ctr.file(`/app/${SYFT_OUTPUT_FILE}`).export(SYFT_OUTPUT_FILE);
-  return id;
+  return ctr.file(`/app/${SYFT_OUTPUT_FILE}`).id();
 }
 
 export type JobExec = (
